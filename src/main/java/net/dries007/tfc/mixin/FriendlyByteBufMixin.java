@@ -25,8 +25,7 @@ public abstract class FriendlyByteBufMixin
 {
     @Redirect(
         method = "writeItemStack",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/network/FriendlyByteBuf;writeNbt(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/network/FriendlyByteBuf;"),
-        remap = false
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/network/FriendlyByteBuf;writeNbt(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/network/FriendlyByteBuf;")
     )
     private FriendlyByteBuf writeSyncableCapabilityData(FriendlyByteBuf buffer, CompoundTag tag, ItemStack stack)
     {
