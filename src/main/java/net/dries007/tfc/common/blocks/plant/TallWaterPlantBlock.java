@@ -6,8 +6,6 @@
 
 package net.dries007.tfc.common.blocks.plant;
 
-import java.util.Random;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -31,7 +29,6 @@ import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.registry.RegistryPlant;
 
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements IFluidLoggable
@@ -139,6 +136,6 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 }

@@ -7,7 +7,6 @@
 package net.dries007.tfc.common.blocks.rock;
 
 import java.util.Locale;
-import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -74,7 +73,7 @@ public class RockSpikeBlock extends Block implements IFluidLoggable, IFallableBl
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

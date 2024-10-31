@@ -145,7 +145,7 @@ public class ThinSpikeBlock extends Block implements IFluidLoggable
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

@@ -109,7 +109,7 @@ public class TFCLoomBlock extends BottomSupportedDeviceBlock implements IFluidLo
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

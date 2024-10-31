@@ -35,7 +35,7 @@ public class FloodedWildCropBlock extends WildCropBlock implements IFluidLoggabl
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

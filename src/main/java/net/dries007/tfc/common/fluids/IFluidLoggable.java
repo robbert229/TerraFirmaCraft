@@ -19,12 +19,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 /**
  * A generic interface for a block which is able to contain any number of predetermined fluid properties
  * <p>
- * Implementors should also (in general) override {@link net.minecraft.world.level.block.state.BlockBehaviour#getFluidState(BlockState)}, and delegate to {@link #getFluidState(BlockState)}
+ * Implementors should also (in general) override {@link net.minecraft.world.level.block.state.BlockBehaviour#getFluidState(BlockState)}, and delegate to {@link #getFluidLoggedState(BlockState)}
  *
  * @see FluidProperty
  * @see FluidHelpers
@@ -74,7 +73,7 @@ public interface IFluidLoggable extends SimpleWaterloggedBlock, LiquidBlockConta
      * Default implementation of {@link net.minecraft.world.level.block.state.BlockBehaviour#getFluidState(BlockState)} which allows arbitrary fluids based on the contained property.
      */
     @SuppressWarnings("deprecation")
-    default FluidState getFluidState(BlockState state)
+    default FluidState getFluidLoggedState(BlockState state)
     {
         final Fluid containedFluid = state.getValue(getFluidProperty()).getFluid();
         if (containedFluid instanceof FlowingFluid flowingFluid)

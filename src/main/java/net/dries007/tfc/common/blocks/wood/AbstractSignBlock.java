@@ -53,7 +53,7 @@ public abstract class AbstractSignBlock extends SignBlock implements IFluidLogga
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

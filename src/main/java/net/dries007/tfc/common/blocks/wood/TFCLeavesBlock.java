@@ -304,7 +304,7 @@ public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockEx
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

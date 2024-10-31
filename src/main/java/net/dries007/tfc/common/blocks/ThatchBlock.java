@@ -81,7 +81,7 @@ public class ThatchBlock extends Block implements IForgeBlockExtension, IFluidLo
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

@@ -248,7 +248,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     private boolean isValid(LevelAccessor level, BlockPos pos, BlockState state)

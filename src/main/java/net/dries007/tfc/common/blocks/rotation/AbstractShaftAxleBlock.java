@@ -108,7 +108,7 @@ public abstract class AbstractShaftAxleBlock extends ExtendedRotatedPillarBlock 
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

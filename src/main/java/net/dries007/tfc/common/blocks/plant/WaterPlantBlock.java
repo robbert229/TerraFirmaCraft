@@ -92,6 +92,6 @@ public abstract class WaterPlantBlock extends PlantBlock implements IFluidLoggab
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 }

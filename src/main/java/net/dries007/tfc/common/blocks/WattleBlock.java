@@ -128,7 +128,7 @@ public class WattleBlock extends StainedWattleBlock implements IGhostBlockHandle
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override

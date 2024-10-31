@@ -225,7 +225,7 @@ public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidL
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state)
     {
-        return IFluidLoggable.super.getFluidState(state);
+        return IFluidLoggable.super.getFluidLoggedState(state);
     }
 
     @Override
