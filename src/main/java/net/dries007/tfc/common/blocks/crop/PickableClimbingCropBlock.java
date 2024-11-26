@@ -32,12 +32,12 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
 
-public abstract class PickableCropBlock extends DefaultCropBlock implements IPickableCrop
+public abstract class PickableClimbingCropBlock extends ClimbingCropBlock implements IPickableCrop
 {
-    public static PickableCropBlock create(ExtendedProperties properties, int stages, Crop crop, @Nullable Supplier<Supplier<? extends Item>> fruit, Supplier<Supplier<? extends Item>> matureFruit)
+    public static PickableClimbingCropBlock create(ExtendedProperties properties, int singleStages, int doubleStages, Crop crop, @Nullable Supplier<Supplier<? extends Item>> fruit, Supplier<Supplier<? extends Item>> matureFruit)
     {
-        final IntegerProperty property = TFCBlockStateProperties.getAgeProperty(stages - 1);
-        return new PickableCropBlock(properties, stages - 1, TFCBlocks.DEAD_CROPS.get(crop), TFCItems.CROP_SEEDS.get(crop), crop.getPrimaryNutrient(), ClimateRanges.CROPS.get(crop), fruit, matureFruit)
+        final IntegerProperty property = TFCBlockStateProperties.getAgeProperty(singleStages + doubleStages - 1);
+        return new PickableClimbingCropBlock(properties, singleStages - 1, singleStages + doubleStages - 1, TFCBlocks.DEAD_CROPS.get(crop), TFCItems.CROP_SEEDS.get(crop), crop.getPrimaryNutrient(), ClimateRanges.CROPS.get(crop), fruit, matureFruit)
         {
             @Override
             public IntegerProperty getAgeProperty()
@@ -47,27 +47,14 @@ public abstract class PickableCropBlock extends DefaultCropBlock implements IPic
         };
     }
 
-    private final @Nullable Supplier<Supplier<? extends Item>> fruit;
+    private final @Nullable  Supplier<Supplier<? extends Item>> fruit;
     private final Supplier<Supplier<? extends Item>> matureFruit;
 
-    protected PickableCropBlock(ExtendedProperties properties, int maxAge, Supplier<? extends Block> dead, Supplier<? extends Item> seeds, FarmlandBlockEntity.NutrientType primaryNutrient, Supplier<ClimateRange> climateRange, @Nullable Supplier<Supplier<? extends Item>> fruit, Supplier<Supplier<? extends Item>> matureFruit)
+    protected PickableClimbingCropBlock(ExtendedProperties properties, int maxSingleAge, int maxAge, Supplier<? extends Block> dead, Supplier<? extends Item> seeds, FarmlandBlockEntity.NutrientType primaryNutrient, Supplier<ClimateRange> climateRange, @Nullable Supplier<Supplier<? extends Item>> fruit, Supplier<Supplier<? extends Item>> matureFruit)
     {
-        super(properties, maxAge, dead, seeds, primaryNutrient, climateRange);
+        super(properties, maxSingleAge, maxAge, dead, seeds, primaryNutrient, climateRange);
         this.fruit = fruit;
         this.matureFruit = matureFruit;
-    }
-
-    @Override
-    @Nullable
-    public Item getFirstFruit()
-    {
-        return fruit == null ? null : fruit.get().get();
-    }
-
-    @Override
-    public Item getSecondFruit()
-    {
-        return matureFruit.get().get();
     }
 
     @Override
@@ -77,6 +64,11 @@ public abstract class PickableCropBlock extends DefaultCropBlock implements IPic
         if (res.consumesAction())
         {
             return res; // use fertilizer
+        }
+        final BlockState belowState = level.getBlockState(pos.below());
+        if (state.getValue(PART) == Part.TOP && belowState.getBlock() instanceof PickableClimbingCropBlock)
+        {
+            return useItemOn(stack, belowState, level, pos.below(), player, hand, hitResult);
         }
         if (level.getBlockEntity(pos) instanceof CropBlockEntity crop)
         {
@@ -103,5 +95,36 @@ public abstract class PickableCropBlock extends DefaultCropBlock implements IPic
             }
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected void postGrowthTick(Level level, BlockPos pos, BlockState state, CropBlockEntity crop)
+    {
+        final BlockPos posAbove = pos.above();
+        final BlockState stateAbove = level.getBlockState(posAbove);
+        int age = Mth.clamp((int) (crop.getGrowth() * getMaxAge()), 0, getMaxAge());
+        if (stateAbove.getBlock() instanceof PickableClimbingCropBlock && age <= maxSingleAge)
+        {
+            age = maxSingleAge + 1;
+        }
+
+        level.setBlock(pos, state.setValue(getAgeProperty(), age), Block.UPDATE_CLIENTS);
+        if (age > maxSingleAge && (stateAbove.isAir() || stateAbove.getBlock() == this))
+        {
+            level.setBlock(posAbove, state.setValue(getAgeProperty(), age).setValue(PART, Part.TOP), Block.UPDATE_ALL);
+        }
+    }
+
+    @Override
+    @Nullable
+    public Item getFirstFruit()
+    {
+        return fruit == null ? null : fruit.get().get();
+    }
+
+    @Override
+    public Item getSecondFruit()
+    {
+        return matureFruit.get().get();
     }
 }

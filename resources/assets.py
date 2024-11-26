@@ -107,6 +107,8 @@ def generate(rm: ResourceManager):
         def rock_lang(_lhs: str, _rhs: str):
             if _lhs in ('smooth', 'raw', 'hardened'):
                 return _lhs, _rhs
+            if _lhs == 'cobble':
+                _lhs = 'cobblestone'
             if _lhs == 'chiseled':
                 return _rhs, _lhs + ' bricks'
             return _rhs, _lhs
