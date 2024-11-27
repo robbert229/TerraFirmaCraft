@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.capabilities.forge;
 
 import java.util.List;
+
+import net.dries007.tfc.common.capabilities.heat.INetworkHeat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +23,9 @@ public class ForgingCapability
 {
     public static final Capability<Forging> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static final ResourceLocation KEY = Helpers.identifier("forging");
+
+    // For access only to the network serializable portion of an item stack heat capability
+    public static final Capability<INetworkForging> NETWORK_CAPABILITY = Helpers.capability(new CapabilityToken<>() {});
 
     @Nullable
     public static Forging get(ItemStack stack)
