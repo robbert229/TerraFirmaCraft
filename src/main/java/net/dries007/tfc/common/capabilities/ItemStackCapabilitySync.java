@@ -77,11 +77,7 @@ public final class ItemStackCapabilitySync
                 }
                 writeToNetwork(FOOD_ID, FoodCapability.NETWORK_CAPABILITY, stack, writableTag);
                 writeToNetwork(HEAT_ID, HeatCapability.NETWORK_CAPABILITY, stack, writableTag);
-//                writeToNetwork(FORGING_ID, ForgingCapability.NETWORK_CAPABILITY, stack, writableTag);
-
-                if (writableTag.contains(FORGING_ID, Tag.TAG_COMPOUND)){
-                    stack.getItem();
-                }
+                writeToNetwork(FORGING_ID, ForgingCapability.NETWORK_CAPABILITY, stack, writableTag);
 
                 return writableTag;
             }
@@ -94,10 +90,6 @@ public final class ItemStackCapabilitySync
     {
         if (tag != null)
         {
-            if (tag.contains(FORGING_ID, Tag.TAG_COMPOUND)){
-                stack.getItem();
-            }
-
             // Always read, if we can. This removes the NBT from the network if we added it
             boolean modified = false;
             modified |= readFromNetwork(FOOD_ID, FoodCapability.NETWORK_CAPABILITY, stack, tag);
@@ -128,14 +120,11 @@ public final class ItemStackCapabilitySync
         if (tag.contains(networkId, Tag.TAG_COMPOUND))
         {
             stack.getCapability(capability).ifPresent(cap -> cap.deserializeNBT(tag.getCompound(networkId)));
-            if(networkId.equals(FORGING_ID)) {
-                return false;
-            }
-
             tag.remove(networkId);
 
             return true;
         }
+
         return false;
     }
 }

@@ -35,7 +35,7 @@ import net.dries007.tfc.common.blocks.devices.Tiered;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.common.capabilities.forge.ForgeRule;
 import net.dries007.tfc.common.capabilities.forge.ForgeStep;
-import net.dries007.tfc.common.capabilities.forge.Forging;
+import net.dries007.tfc.common.capabilities.forge.ForgingHandler;
 import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
 import net.dries007.tfc.common.capabilities.forge.ForgingCapability;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
@@ -72,7 +72,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
     }
 
     @Nullable
-    public Forging getMainInputForging()
+    public ForgingHandler getMainInputForging()
     {
         return ForgingCapability.get(inventory.getStackInSlot(AnvilBlockEntity.SLOT_INPUT_MAIN));
     }
@@ -141,7 +141,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         final ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MAIN);
         if (!stack.isEmpty())
         {
-            final Forging forge = ForgingCapability.get(stack);
+            final ForgingHandler forge = ForgingCapability.get(stack);
             if (forge != null)
             {
                 AnvilRecipe recipe = forge.getRecipe(level);
@@ -182,7 +182,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         final ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MAIN);
         if (!stack.isEmpty())
         {
-            final Forging forge = ForgingCapability.get(stack);
+            final ForgingHandler forge = ForgingCapability.get(stack);
             if (forge != null)
             {
                 forge.setRecipe(recipe, inventory);
@@ -198,7 +198,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         assert level != null;
 
         final ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MAIN);
-        final Forging forge = ForgingCapability.get(stack);
+        final ForgingHandler forge = ForgingCapability.get(stack);
         if (forge != null)
         {
             // Check that we have a hammer, either in the anvil or in the player inventory
@@ -309,7 +309,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         }
 
         final ItemStack stack = inventory.getStackInSlot(SLOT_INPUT_MAIN);
-        final Forging forge = ForgingCapability.get(stack);
+        final ForgingHandler forge = ForgingCapability.get(stack);
         if (forge != null)
         {
             // Prevent the player from immediately destroying the item by overworking

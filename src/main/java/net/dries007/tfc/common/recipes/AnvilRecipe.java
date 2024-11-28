@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.capabilities.forge.ForgeRule;
-import net.dries007.tfc.common.capabilities.forge.Forging;
+import net.dries007.tfc.common.capabilities.forge.ForgingHandler;
 import net.dries007.tfc.common.capabilities.forge.ForgingCapability;
 import net.dries007.tfc.common.recipes.inventory.EmptyInventory;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
@@ -89,7 +89,7 @@ public class AnvilRecipe implements ISimpleRecipe<AnvilRecipe.Inventory>
 
     public boolean checkComplete(Inventory inventory)
     {
-        final Forging forging = ForgingCapability.get(inventory.getItem());
+        final ForgingHandler forging = ForgingCapability.get(inventory.getItem());
         return forging != null && forging.matches(rules) && isWorkMatched(forging.getWork(), computeTarget(inventory));
     }
 

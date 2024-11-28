@@ -20,7 +20,7 @@ import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
 import net.dries007.tfc.common.capabilities.forge.ForgeRule;
 import net.dries007.tfc.common.capabilities.forge.ForgeStep;
 import net.dries007.tfc.common.capabilities.forge.ForgeSteps;
-import net.dries007.tfc.common.capabilities.forge.Forging;
+import net.dries007.tfc.common.capabilities.forge.ForgingHandler;
 import net.dries007.tfc.common.container.AnvilContainer;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
 import net.dries007.tfc.util.Helpers;
@@ -66,7 +66,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         assert level != null;
 
         // Draw rule icons
-        final @Nullable Forging forging = blockEntity.getMainInputForging();
+        final @Nullable ForgingHandler forging = blockEntity.getMainInputForging();
         if (forging != null)
         {
             // Draw the progress indicators
@@ -127,7 +127,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         super.renderTooltip(graphics, mouseX, mouseY);
 
         final Level level = blockEntity.getLevel();
-        final @Nullable Forging forging = blockEntity.getMainInputForging();
+        final @Nullable ForgingHandler forging = blockEntity.getMainInputForging();
         if (forging != null && level != null)
         {
             final AnvilRecipe recipe = forging.getRecipe(level);

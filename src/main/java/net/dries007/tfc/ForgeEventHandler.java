@@ -162,7 +162,7 @@ import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.FoodDefinition;
 import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.capabilities.food.TFCFoodData;
-import net.dries007.tfc.common.capabilities.forge.Forging;
+import net.dries007.tfc.common.capabilities.forge.ForgingHandler;
 import net.dries007.tfc.common.capabilities.forge.ForgingBonus;
 import net.dries007.tfc.common.capabilities.forge.ForgingCapability;
 import net.dries007.tfc.common.capabilities.glass.GlassWorkData;
@@ -383,7 +383,7 @@ public final class ForgeEventHandler
         if (!stack.isEmpty())
         {
             // Attach mandatory capabilities
-            event.addCapability(ForgingCapability.KEY, new Forging(stack));
+            event.addCapability(ForgingCapability.KEY, new ForgingHandler(stack));
 
             // Optional capabilities
             HeatDefinition def = HeatCapability.getDefinition(stack);

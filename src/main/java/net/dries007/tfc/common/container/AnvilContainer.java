@@ -11,12 +11,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
 import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
 import net.dries007.tfc.common.capabilities.Capabilities;
 import net.dries007.tfc.common.capabilities.forge.ForgeStep;
-import net.dries007.tfc.common.capabilities.forge.Forging;
+import net.dries007.tfc.common.capabilities.forge.ForgingHandler;
 import net.dries007.tfc.common.capabilities.forge.ForgingCapability;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
 import net.dries007.tfc.util.Helpers;
@@ -82,7 +81,7 @@ public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> imple
                     && !moveItemStackTo(stack, AnvilBlockEntity.SLOT_INPUT_MAIN, AnvilBlockEntity.SLOT_INPUT_SECOND + 1, false);
                 case CONTAINER -> {
                     final Level level = blockEntity.getLevel();
-                    final Forging forge = ForgingCapability.get(stack);
+                    final ForgingHandler forge = ForgingCapability.get(stack);
 
                     // Shift clicking needs to attempt to clear the recipe on the stack, then restore it if we fail to transfer out
                     AnvilRecipe recipe = null;

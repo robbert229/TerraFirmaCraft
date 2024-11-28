@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,11 +26,11 @@ import net.dries007.tfc.util.Helpers;
  * A capability instance which is attached to all items, in order to store (cached) and manipulate anvil working/forging data.
  * This instance is lazily initialized upon first getCapability() query, and saves all data directly to the stack tag.
  */
-public final class Forging implements ICapabilityProvider
+public final class ForgingHandler implements ICapabilitySerializable<CompoundTag>, IForging
 {
     private static final String KEY = "tfc:forging";
 
-    private final LazyOptional<Forging> capability = LazyOptional.of(() -> this);;
+    private final LazyOptional<ForgingHandler> capability = LazyOptional.of(() -> this);;
     private final ItemStack stack;
 
     private final ForgeSteps steps;
@@ -39,7 +39,7 @@ public final class Forging implements ICapabilityProvider
     @Nullable private AnvilRecipe recipe;
     @Nullable private ResourceLocation uninitializedRecipe;
 
-    public Forging(ItemStack stack)
+    public ForgingHandler(ItemStack stack)
     {
         this.stack = stack;
 
@@ -47,7 +47,10 @@ public final class Forging implements ICapabilityProvider
         this.recipe = null;
         this.steps = new ForgeSteps();
 
-        load();
+        CompoundTag tag = stack.getTagElement(KEY);
+        if (tag != null) {
+            deserializeNBT(tag);
+        }
     }
 
     /**
@@ -156,26 +159,11 @@ public final class Forging implements ICapabilityProvider
     @NotNull
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
     {
-        if (cap == ForgingCapability.CAPABILITY)
+        if (cap == ForgingCapability.CAPABILITY || cap == ForgingCapability.NETWORK_CAPABILITY)
         {
             return capability.cast();
         }
         return LazyOptional.empty();
-    }
-
-    private void load()
-    {
-        final CompoundTag tag = stack.getTagElement(KEY);
-        if (tag != null)
-        {
-            work = tag.getInt("work");
-            target = tag.getInt("target");
-
-            steps.read(tag);
-
-            uninitializedRecipe = tag.contains("recipe", Tag.TAG_STRING) ? Helpers.resourceLocation(tag.getString("recipe")) : null;
-            recipe = null;
-        }
     }
 
     private void save()
@@ -184,24 +172,40 @@ public final class Forging implements ICapabilityProvider
         {
             // No defining data, so don't save anything
             stack.removeTagKey(KEY);
+        } else {
+            stack.addTagElement(KEY, serializeNBT());
         }
-        else
-        {
-            final CompoundTag tag = stack.getOrCreateTagElement(KEY);
+    }
 
-            tag.putInt("work", work);
-            tag.putInt("target", target);
+    @Override
+    public CompoundTag serializeNBT()
+    {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putInt("work", work);
+        nbt.putInt("target", target);
+        steps.write(nbt);
 
-            steps.write(tag);
-
-            if (recipe != null)
-            {
-                tag.putString("recipe", recipe.getId().toString());
-            }
-            else if (uninitializedRecipe != null)
-            {
-                tag.putString("recipe", uninitializedRecipe.toString());
-            }
+        if (recipe != null) {
+            nbt.putString("recipe", recipe.getId().toString());
         }
+        else if (uninitializedRecipe != null) {
+             nbt.putString("recipe", uninitializedRecipe.toString());
+        }
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag)
+    {
+        work = tag.getInt("work");
+        target = tag.getInt("target");
+
+        steps.read(tag);
+
+        uninitializedRecipe = tag.contains("recipe", Tag.TAG_STRING)
+            ? Helpers.resourceLocation(tag.getString("recipe"))
+            : null;
+
+        recipe = null;
     }
 }
